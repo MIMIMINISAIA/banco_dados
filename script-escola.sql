@@ -76,7 +76,7 @@ INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES 
 INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 15', '15', '2006-10-31', 'rua 15');
 INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 16', '16', '2007-05-28', 'rua 16');
 INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 17', '17', '2024-03-04', 'rua 17');
-INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 18', '18', '2006-31-07', 'rua 18');
+INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 18', '18', '2006-03-07', 'rua 18');
 INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 19', '19', '2005-12-04', 'rua 19');
 INSERT INTO alunos (nome, numero_identificacao, dt_nascimento, endereco) VALUES ('aluno 20', '20', '1998-05-20', 'rua 20');
 
@@ -92,10 +92,12 @@ select * from professores p;
 
 
 insert into disciplina (nome, codigo, professores_id) values ('matematica', '1', 1);
-insert into disciplina (nome, codigo, professores_id) values ('portugues', '2', 2);
-insert into disciplina (nome, codigo, professores_id) values ('ingles', '3', 3);
-insert into disciplina (nome, codigo, professores_id) values ('artes', '4',2 );
+insert into disciplina (nome, codigo, professores_id) values ('fisica', '2', 2);
+insert into disciplina (nome, codigo, professores_id) values ('biologia', '3', 3);
+insert into disciplina (nome, codigo, professores_id) values ('quimica', '4',2 );
 insert into disciplina (nome, codigo, professores_id) values ('ciencias', '5',1);
+insert into disciplina (nome, codigo, professores_id) values ('historia', '6',2);
+
 
 select * from disciplina d;
 
@@ -203,7 +205,28 @@ insert into  notas (valor_nota, alunos_id, disciplina_id)values
 (4.00, 17, 5),
 (3.00, 18, 5),
 (2.00, 19, 5),
-(1.00, 20, 5);
+(1.00, 20, 5),
+
+(10.00, 1, 6),
+(9.00, 2, 6),
+(8.00, 3, 6),
+(7.00, 4, 6),
+(6.00, 5, 6),
+(5.00, 6, 6),
+(4.00, 7, 6),
+(3.00, 8, 6),
+(2.00, 9, 6),
+(1.00, 10,6),
+(10.00, 11, 6),
+(9.00, 12, 6),
+(8.00, 13, 6),
+(7.00, 14, 6),
+(6.00, 15, 6),
+(5.00, 16, 6),
+(4.00, 17, 6),
+(3.00, 18, 6),
+(2.00, 19, 6),
+(1.00, 20, 6);
 
 
 -- exercicio 1
@@ -246,7 +269,7 @@ where n.valor_nota >= 7;
 select n.valor_nota, a.nome, d.nome, d.codigo, d.id  from notas n  
 inner join alunos a on a.id = n.alunos_id 
 inner join disciplina d on d.id = n.disciplina_id
-where n.valor_nota >= 7 and d.nome = 'inglês';
+where n.valor_nota >= 7 and d.nome = 'fisica';
 
 
 -- exercício 7
@@ -263,6 +286,169 @@ inner join alunos a on a.id = n.alunos_id
 inner join disciplina d on d.id = n.disciplina_id
 where n.valor_nota < 7;
 
--- exercicio 9
+-- exercício 9
+
+select a.nome, a.dt_nascimento from alunos a 
+where a.dt_nascimento > '2005-02-09';
+
+
+-- exercício 10
+
+select a.nome as alunos, d.nome as disciplina, n.valor_nota from notas n 
+left join alunos a on a.id = n.alunos_id
+left join disciplina d on d.id = n.disciplina_id where isnull(n.valor_nota);
+
+-- exercicio 11
+select a.nome as alunos, d.nome as disciplina from alunos a
+inner join interacao i on a.id = i.alunos_id 
+inner join disciplina d on i.disciplina_id = d.id 
+where d.nome = 'matematica';
+
+-- exercicio 12
+select a.nome as alunos, p.nome as profressores, p.grau_academico, d.nome as disciplina 
+from alunos a
+inner join interacao i on a.id = i.alunos_id 
+inner join disciplina d on i.disciplina_id = d.id 
+inner join professores p on d.professores_id = p.id 
+where p.grau_academico = '1';
+
+-- exercicio 13
+select d.nome as displina_nome, p.nome as professor_nome 
+from disciplina d 
+left join professores p on d.professores_id = p.id;
+
+
+
+-- exercicio 14
+select count(*) as total_alunos_ma from alunos a 
+inner join interacao i on a.id = i.alunos_id
+inner join disciplina d on i.disciplina_id = d.id
+where d.nome = 'matematica';
+
+
+-- exercicio 15
+
+select sum(valor_nota) as soma
+     from notas n
+     inner join disciplina d on n.disciplina_id = d.id 
+     where nome = 'fisica';
+
+
+-- exercicio 16
+
+select max(valor_nota) as maior_valor 
+      from notas n
+      inner join disciplina d on n.disciplina_id = d.id 
+      where nome = 'historia' ;
+     
+-- exercicio 17
+select min(valor_nota) as menor_valor 
+     from notas n
+     inner join disciplina d on n.disciplina_id = d.id 
+     where nome = 'quimica';
+    
+-- exercico 18
+select avg(valor_nota) as nota_media 
+     from notas n
+     inner join disciplina d on n.disciplina_id = d.id 
+     where nome = 'biologia';
+    
+-- exercicio 19
+select d.nome as disciplina, count(a.id) as numero_de_alunos
+from disciplina d 
+join interacao i on d.id = i.disciplina_id
+join alunos a on i.alunos_id = a.id
+group by d.nome;
+    
+
+
+-- exercicio 20 
+select sum(valor_nota) as soma from notas;
+
+-- exercicio 21
+select max(valor_nota) as maior_valor from notas ;
+
+-- exercico 22
+select min(valor_nota) as menor_valor from notas;
+
+-- exercicio 23
+select avg(valor_nota) as nota_media from notas;
+
+
+-- exercicio 24
+select d.nome AS Disciplina, avg(n.valor_nota) AS Media_Notas
+from disciplina d
+inner join notas n ON d.id = n.disciplina_id
+group by d.nome;
+
+-- exercicio 25
+select d.nome AS disciplina,a.nome as aluno,avg(n.valor_nota) as media
+from notas n
+inner join alunos a on n.alunos_id = a.id
+inner join disciplina d on n.disciplina_id = d.id
+group by d.nome, a.nome
+order by d.nome , a.nome ;
+
+-- exercicio 26
+select d.nome  AS disciplina ,a.nome as aluno,avg(n.valor_nota) as media
+from notas n
+inner join alunos a on n.alunos_id = a.id
+inner join disciplina d on n.disciplina_id = d.id
+group by d.nome, a.nome
+order by d.nome asc , media desc;
+
+-- exercicio 27
+select alunos_id, valor_nota,a.nome  
+from notas n
+inner join disciplina d on n.disciplina_id = d.id 
+inner join alunos a on n.alunos_id = a.id 
+where d.nome = 'historia'
+order by valor_nota limit 5;
+
+-- exercicio 28
+select a.nome as aluno,avg(n.valor_nota) as media from notas n
+inner join alunos a on n.alunos_id = a.id
+inner join disciplina d on n.disciplina_id = d.id
+where d.nome = 'Química'
+group by a.nome 
+order by media desc limit 3;
+
+-- exercicio 29
+select a.nome as aluno,avg(n.valor_nota) as media from notas n
+inner join alunos a on n.alunos_id = a.id
+inner join disciplina d on n.disciplina_id = d.id
+group by a.nome 
+order by media desc limit 10;
+
+-- exercicio 30
+select count(distinct  a.id) AS numero_de_alunos_ativos from alunos a
+inner join interacao i ON a.id = i.alunos_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
