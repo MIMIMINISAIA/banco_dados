@@ -105,7 +105,7 @@ INSERT INTO item_pedido (pedido_id, pizza_id, quantidade, valor) VALUES (8, 4, 2
 
 /*
 	select [distinct] <colunas>
-	from <tabelas>
+	from <tabelas> 
 	[where condição]
 	[group by <coluna>]
 	[having <condição>]
@@ -161,8 +161,70 @@ select * from pizza where valor < 17 or valor > 20;
 select * from pizza where not (valor >= 17 and valor <= 20);
 select * from pizza where valor not between 17 and 20;
 
+-- selecionar todas as pizzas com valores iguais a 15 e 20 reais
+select * from pizza where valor = 15 or valor = 20;
+select * from pizza where valor in (15,20);
+
+-- selecionar todas as pizzas com valores diferentes de 15 e 20
+select * from pizza where valor != 15 and valor != 20;
+select * from pizza where valor not in (15,20);
 
 
+-- selecionar todas as pizzas com valores nulos
+select * from pizza where valor <=> null;
+select * from pizza where valor is null;
+
+-- selecionar todas as pizzas com valores diferentes de nullo
+select * from pizza where valor is not null;
+
+-- selecionar todas as pizzas que começam com a letra e
+select * from pizza where nome like 'E%';
+
+-- selecionar todas as pizzas que terminam com a letra a
+select * from pizza where nome like '%a';
+
+-- selecionar todas as pizzas que contenham a letra ro
+select * from pizza where nome like '%ro%';
+
+-- ordenar coluna
+select * from pizza order by valor desc;
+
+-- selecionar as 3 pizzas amsi caras
+select * from pizza order by valor desc limit 3;
+
+-/* funçoes de agregação
+AVG(coluna) media dos valores da coluna
+count(coluna) conta o numero de linhas
+max(coluna) maior valor da coluna
+min(coluna)menor valor da coluna
+sum(coluna) somados valoresda coluna
+*/
+
+-- qual é media de preco das pizza
+select avg(valor) as preco_medio from pizza;
+select avg(valor) as preco_medio  from pizza where nome like '%esa';
+
+-- quantos sabore temos cadastrados?? ein broo?
+select count(*) from pizza; -- considera valor mullos
+select count(valor) as qtde from pizza; -- nao considerar valores nullos
+
+-- qual a pizza mais cara?
+select max(valor) as maior_valor from pizza;
+
+-- qual a pizza mais barata
+select min(valor) as menor_valor from pizza;
+
+-- somar todos os valores
+select sum(valor) as soma from pizza;
+
+select sum(valor) as total from item_pedido where pedido_id = 7 ;
+
+select sum(quantidade * valor) from item_pedido where pedido_id = 7;
+
+select cliente_id, nome, count(p.pedido_id) qtde_pedido
+       from pedido p
+       inner join cliente c on p.cliente_id = c.cliente_id
+       group by c.cliente_id, c.nome;
 
 
 
